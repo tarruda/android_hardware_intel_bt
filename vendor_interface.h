@@ -25,7 +25,7 @@
 namespace android {
 namespace hardware {
 namespace bluetooth {
-namespace V1_0 {
+namespace V1_1 {
 namespace implementation {
 
 using ::android::hardware::hidl_vec;
@@ -38,7 +38,7 @@ class VendorInterface {
  public:
   static bool Initialize(InitializeCompleteCallback initialize_complete_cb,
                          PacketReadCallback event_cb, PacketReadCallback acl_cb,
-                         PacketReadCallback sco_cb);
+                         PacketReadCallback sco_cb, PacketReadCallback iso_cb);
   static void Shutdown();
   static VendorInterface *get();
 
@@ -51,7 +51,7 @@ class VendorInterface {
 
   bool Open(InitializeCompleteCallback initialize_complete_cb,
             PacketReadCallback event_cb, PacketReadCallback acl_cb,
-            PacketReadCallback sco_cb);
+            PacketReadCallback sco_cb, PacketReadCallback iso_cb);
   void Close();
 
   void OnTimeout();
@@ -70,7 +70,7 @@ class VendorInterface {
 };
 
 }  // namespace implementation
-}  // namespace V1_0
+}  // namespace V1_1
 }  // namespace bluetooth
 }  // namespace hardware
 }  // namespace android

@@ -14,9 +14,9 @@
 // limitations under the License.
 //
 
-#define LOG_TAG "android.hardware.bluetooth@1.0-service.intel"
+#define LOG_TAG "android.hardware.bluetooth@1.1-service.intel"
 
-#include <android/hardware/bluetooth/1.0/IBluetoothHci.h>
+#include <android/hardware/bluetooth/1.1/IBluetoothHci.h>
 #include <hidl/HidlSupport.h>
 #include <hidl/HidlTransportSupport.h>
 
@@ -24,14 +24,14 @@
 #include "bluetooth_hci.h"
 
 using ::android::hardware::configureRpcThreadpool;
-using ::android::hardware::bluetooth::V1_0::IBluetoothHci;
-using ::android::hardware::bluetooth::V1_0::implementation::BluetoothHci;
+using ::android::hardware::bluetooth::V1_1::IBluetoothHci;
+using ::android::hardware::bluetooth::V1_1::implementation::BluetoothHci;
 using ::android::hardware::joinRpcThreadpool;
 using ::android::sp;
 
 int main(int /* argc */, char** /* argv */) {
   sp<IBluetoothHci> bluetooth = new BluetoothHci;
   configureRpcThreadpool(1, true);
-  bluetooth->registerAsService();
+  (void)(bluetooth->registerAsService());
   joinRpcThreadpool();
 }

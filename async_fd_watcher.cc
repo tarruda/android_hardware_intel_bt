@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-#define LOG_TAG "android.hardware.bluetooth@1.0-service.intel"
+#define LOG_TAG "android.hardware.bluetooth@1.1-service.intel"
 
 #include "async_fd_watcher.h"
 

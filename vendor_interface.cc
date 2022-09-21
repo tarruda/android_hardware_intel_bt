@@ -16,7 +16,7 @@
 
 #include "vendor_interface.h"
 
-#define LOG_TAG "android.hardware.bluetooth@1.0-service.intel"
+#define LOG_TAG "android.hardware.bluetooth@1.1-service.intel"
 #include <cutils/properties.h>
 #include <utils/Log.h>
 
@@ -43,7 +43,7 @@ extern const bt_vendor_interface_t BLUETOOTH_VENDOR_LIB_INTERFACE;
 
 namespace {
 
-using android::hardware::bluetooth::V1_0::implementation::VendorInterface;
+using android::hardware::bluetooth::V1_1::implementation::VendorInterface;
 using android::hardware::hidl_vec;
 
 struct {
@@ -148,7 +148,7 @@ const bt_vendor_callbacks_t lib_callbacks = {
 namespace android {
 namespace hardware {
 namespace bluetooth {
-namespace V1_0 {
+namespace V1_1 {
 namespace implementation {
 
 class FirmwareStartupTimer {
@@ -170,14 +170,14 @@ class FirmwareStartupTimer {
 bool VendorInterface::Initialize(
     InitializeCompleteCallback initialize_complete_cb,
     PacketReadCallback event_cb, PacketReadCallback acl_cb,
-    PacketReadCallback sco_cb) {
+    PacketReadCallback sco_cb, PacketReadCallback iso_cb) {
   if (g_vendor_interface) {
     ALOGE("%s: No previous Shutdown()?", __func__);
     return false;
   }
   g_vendor_interface = new VendorInterface();
   return g_vendor_interface->Open(initialize_complete_cb, event_cb, acl_cb,
-                                  sco_cb);
+                                  sco_cb, iso_cb);
 }
 
 void VendorInterface::Shutdown() {
@@ -193,7 +193,8 @@ VendorInterface* VendorInterface::get() { return g_vendor_interface; }
 bool VendorInterface::Open(InitializeCompleteCallback initialize_complete_cb,
                            PacketReadCallback event_cb,
                            PacketReadCallback acl_cb,
-                           PacketReadCallback sco_cb) {
+                           PacketReadCallback sco_cb,
+                           PacketReadCallback iso_cb) {
   initialize_complete_cb_ = initialize_complete_cb;
 
   // Initialize vendor interface
@@ -257,7 +258,7 @@ bool VendorInterface::Open(InitializeCompleteCallback initialize_complete_cb,
 
   if (fd_count == 1) {
     hci::H4Protocol* h4_hci =
-        new hci::H4Protocol(fd_list[0], intercept_events, acl_cb, sco_cb);
+        new hci::H4Protocol(fd_list[0], intercept_events, acl_cb, sco_cb, iso_cb);
     fd_watcher_.WatchFdForNonBlockingReads(
         fd_list[0], [h4_hci](int fd) { h4_hci->OnDataReady(fd); });
     hci_ = h4_hci;
@@ -391,7 +392,7 @@ void VendorInterface::HandleIncomingEvent(const hidl_vec<uint8_t>& hci_packet) {
 }
 
 }  // namespace implementation
-}  // namespace V1_0
+}  // namespace V1_1
 }  // namespace bluetooth
 }  // namespace hardware
 }  // namespace android
