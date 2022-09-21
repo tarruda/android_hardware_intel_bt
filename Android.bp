@@ -14,12 +14,12 @@
 // limitations under the License.
 
 cc_binary {
-    name: "android.hardware.bluetooth@1.0-service.vbt",
+    name: "android.hardware.bluetooth@1.0-service.intel",
     proprietary: true,
     relative_install_path: "hw",
     include_dirs: [
-        "packages/modules/Bluetooth/system/device/include",
-        "packages/modules/Bluetooth/system/stack/include"
+        "system/bt/device/include",
+        "system/bt/stack/include"
     ],
     srcs: [
         "async_fd_watcher.cc",
@@ -31,18 +31,17 @@ cc_binary {
         "h4_protocol.cc",
         "mct_protocol.cc",
         "service.cpp",
+        "bt_vendor.cc",
     ],
     shared_libs: [
         "android.hardware.bluetooth@1.0",
         "libbase",
         "libcutils",
         "libhardware",
-        "libhwbinder",
         "libhidlbase",
-        "libhidltransport",
         "liblog",
         "libutils",
         "libusb",
     ],
-    init_rc: ["android.hardware.bluetooth@1.0-service.vbt.rc"],
+    init_rc: ["android.hardware.bluetooth@1.0-service.intel.rc"],
 }

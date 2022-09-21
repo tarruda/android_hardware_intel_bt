@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-#define LOG_TAG "android.hardware.bluetooth@1.0-service.vbt"
+#define LOG_TAG "android.hardware.bluetooth@1.0-service.intel"
 #include "bluetooth_hci.h"
 
 #include <log/log.h>

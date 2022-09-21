@@ -16,7 +16,7 @@
 
 #include "vendor_interface.h"
 
-#define LOG_TAG "android.hardware.bluetooth@1.0-service.vbt"
+#define LOG_TAG "android.hardware.bluetooth@1.0-service.intel"
 #include <cutils/properties.h>
 #include <utils/Log.h>
 
@@ -33,11 +33,13 @@ typedef uint16_t UINT16;
 #define STREAM_TO_UINT8(u8, p)   {u8 = (UINT8)(*(p)); (p) += 1;}
 #define STREAM_TO_UINT16(u16, p) {u16 = ((UINT16)(*(p)) + (((UINT16)(*((p) + 1))) << 8)); (p) += 2;}
 
-static const char* VENDOR_LIBRARY_NAME = "libbt-vendor.so";
-static const char* VENDOR_LIBRARY_SYMBOL_NAME =
-    "BLUETOOTH_VENDOR_LIB_INTERFACE";
+// static const char* VENDOR_LIBRARY_NAME = "libbt-vendor.so";
+// static const char* VENDOR_LIBRARY_SYMBOL_NAME =
+//     "BLUETOOTH_VENDOR_LIB_INTERFACE";
 
 static const int INVALID_FD = -1;
+
+extern const bt_vendor_interface_t BLUETOOTH_VENDOR_LIB_INTERFACE;
 
 namespace {
 
@@ -196,20 +198,21 @@ bool VendorInterface::Open(InitializeCompleteCallback initialize_complete_cb,
 
   // Initialize vendor interface
 
-  lib_handle_ = dlopen(VENDOR_LIBRARY_NAME, RTLD_NOW);
-  if (!lib_handle_) {
-    ALOGE("%s unable to open %s (%s)", __func__, VENDOR_LIBRARY_NAME,
-          dlerror());
-    return false;
-  }
+  // lib_handle_ = dlopen(VENDOR_LIBRARY_NAME, RTLD_NOW);
+  // if (!lib_handle_) {
+  //   ALOGE("%s unable to open %s (%s)", __func__, VENDOR_LIBRARY_NAME,
+  //         dlerror());
+  //   return false;
+  // }
 
-  lib_interface_ = reinterpret_cast<bt_vendor_interface_t*>(
-      dlsym(lib_handle_, VENDOR_LIBRARY_SYMBOL_NAME));
-  if (!lib_interface_) {
-    ALOGE("%s unable to find symbol %s in %s (%s)", __func__,
-          VENDOR_LIBRARY_SYMBOL_NAME, VENDOR_LIBRARY_NAME, dlerror());
-    return false;
-  }
+  // lib_interface_ = reinterpret_cast<bt_vendor_interface_t*>(
+  //     dlsym(lib_handle_, VENDOR_LIBRARY_SYMBOL_NAME));
+  // if (!lib_interface_) {
+  //   ALOGE("%s unable to find symbol %s in %s (%s)", __func__,
+  //         VENDOR_LIBRARY_SYMBOL_NAME, VENDOR_LIBRARY_NAME, dlerror());
+  //   return false;
+  // }
+  lib_interface_ = &BLUETOOTH_VENDOR_LIB_INTERFACE;
 
   // Get the local BD address
 
@@ -303,10 +306,10 @@ void VendorInterface::Close() {
     lib_interface_->cleanup();
   }
 
-  if (lib_handle_ != nullptr) {
-    dlclose(lib_handle_);
-    lib_handle_ = nullptr;
-  }
+  // if (lib_handle_ != nullptr) {
+  //   dlclose(lib_handle_);
+  //   lib_handle_ = nullptr;
+  // }
 
   if (firmware_startup_timer_ != nullptr) {
     delete firmware_startup_timer_;

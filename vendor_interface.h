@@ -58,8 +58,8 @@ class VendorInterface {
 
   void HandleIncomingEvent(const hidl_vec<uint8_t>& hci_packet);
 
-  void *lib_handle_;
-  bt_vendor_interface_t *lib_interface_;
+  // void *lib_handle_;
+  const bt_vendor_interface_t *lib_interface_;
   async::AsyncFdWatcher fd_watcher_;
   InitializeCompleteCallback initialize_complete_cb_;
   hci::HciProtocol* hci_;
